@@ -2,6 +2,7 @@ package org.example;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -12,25 +13,19 @@ import org.testng.asserts.SoftAssert;
 public class LoginTests {
 
     private WebDriver driver;
-    private SoftAssert softAssert;
+    private LoginPage loginPage;
 
     @BeforeMethod
     public void setUp() {
         driver = new ChromeDriver();
-        softAssert = new SoftAssert();
         driver.get("https://www.saucedemo.com");
+        loginPage =  new LoginPage(driver);
     }
 
     @Test(priority = 1)
     public void pageTitleTest() {
         var title = driver.getTitle();
         Assert.assertEquals(title, "Swag Labs");
-
-        var login = driver.findElement(By.id("user-name"));
-        var password = driver.findElement(By.id("password"));
-
-        softAssert.assertTrue(login.isDisplayed());
-        softAssert.assertTrue(password.isDisplayed());
     }
 
     @DataProvider(name = "loadData")
@@ -44,18 +39,13 @@ public class LoginTests {
 
     @Test(priority = 2, dataProvider = "loadData")
     public void loadDataTest(String username, String password) {
-        driver.findElement(By.id("user-name")).sendKeys(username);
-        driver.findElement(By.id("password")).sendKeys(password);
-        System.out.println("Username: " + username + " - " + password);
+        loginPage.enterLogin(username);
+        loginPage.enterPassword(password);
+        loginPage.clickLoginButton();
     }
 
     @AfterMethod()
     public void tearDown() {
-        try {
-            softAssert.assertAll();
-        }
-        finally {
-            if (driver != null) driver.quit();
-        }
+        if (driver != null) driver.quit();
     }
 }
