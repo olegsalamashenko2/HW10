@@ -12,10 +12,12 @@ public class LoginPage {
     private WebElement loginButton;
 
     public void enterLogin(String login) {
+        name.clear();
         name.sendKeys(login);
     }
 
     public void enterPassword(String password) {
+        this.password.clear();
         this.password.sendKeys(password);
     }
 
