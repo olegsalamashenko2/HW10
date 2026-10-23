@@ -1,7 +1,9 @@
 package org.example;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class LoginPage {
     @FindBy(id = "user-name")
@@ -10,6 +12,10 @@ public class LoginPage {
     private WebElement password;
     @FindBy(id = "login-button")
     private WebElement loginButton;
+
+    public LoginPage(WebDriver driver) {
+        PageFactory.initElements(driver, this);
+    }
 
     public void enterLogin(String login) {
         name.clear();
